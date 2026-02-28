@@ -1,8 +1,14 @@
 import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
+
+# Streamlit Cloud: secretsから環境変数に転送
+for key in ("SUPABASE_URL", "SUPABASE_KEY", "ANTHROPIC_API_KEY"):
+    if key not in os.environ and key in st.secrets:
+        os.environ[key] = st.secrets[key]
 
 _client: Client | None = None
 
