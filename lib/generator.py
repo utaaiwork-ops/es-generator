@@ -1,7 +1,7 @@
 import os
 import anthropic
 from dotenv import load_dotenv
-from prompts.templates import SYSTEM_PROMPT, build_user_prompt
+from prompts.templates import get_system_prompt, build_user_prompt
 
 load_dotenv()
 
@@ -20,18 +20,21 @@ def generate_es(
 
     client = anthropic.Anthropic(api_key=api_key)
 
+    # LLMは日本語の文字数カウントが不正確なので、内部的に25%少ない上限を渡す
+    internal_limit = int(char_limit * 0.75)
+
     user_prompt = build_user_prompt(
         profile=profile,
         company_info=company_info,
         es_type=es_type,
-        char_limit=char_limit,
+        char_limit=internal_limit,
         custom_question=custom_question,
     )
 
     message = client.messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=2048,
-        system=SYSTEM_PROMPT,
+        system=get_system_prompt(es_type),
         messages=[{"role": "user", "content": user_prompt}],
     )
 
