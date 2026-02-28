@@ -15,7 +15,6 @@ CUSTOM_CSS = """
 
     /* === Hide Streamlit defaults === */
     #MainMenu {visibility: hidden;}
-    header {visibility: hidden;}
     footer {visibility: hidden;}
 
     /* === Typography === */

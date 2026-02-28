@@ -41,7 +41,7 @@ with col1:
         unsafe_allow_html=True,
     )
     if st.button("プロフィール設定へ", use_container_width=True, type="primary"):
-        st.switch_page("pages/1_profile.py")
+        st.switch_page("pages/1_プロフィール設定.py")
 
 with col2:
     st.markdown(
@@ -55,7 +55,7 @@ with col2:
         unsafe_allow_html=True,
     )
     if st.button("ES生成へ", use_container_width=True, type="primary"):
-        st.switch_page("pages/2_generate.py")
+        st.switch_page("pages/2_ES生成.py")
 
 with col3:
     st.markdown(
@@ -69,7 +69,7 @@ with col3:
         unsafe_allow_html=True,
     )
     if st.button("履歴一覧へ", use_container_width=True, type="primary"):
-        st.switch_page("pages/3_history.py")
+        st.switch_page("pages/3_履歴一覧.py")
 
 # --- Step Guide ---
 st.markdown("")

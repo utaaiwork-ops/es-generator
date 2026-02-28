@@ -140,4 +140,4 @@ if submitted:
 # 完成したらES生成への導線
 if percent == 100:
     if st.button("ES生成画面へ進む", use_container_width=True):
-        st.switch_page("pages/2_generate.py")
+        st.switch_page("pages/2_ES生成.py")
