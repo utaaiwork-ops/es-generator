@@ -1,23 +1,29 @@
-import os
 import streamlit as st
-from dotenv import load_dotenv
 from lib.styles import inject_css
 
-load_dotenv()
 
-
-def check_password() -> bool:
-    """簡易パスワード認証。認証済みならTrueを返す。"""
-    if st.session_state.get("authenticated"):
+def check_auth() -> bool:
+    """Google OIDC認証（st.login ベース）。"""
+    if st.user.is_logged_in:
         return True
 
     inject_css()
 
+    # フルスクリーンのポップなグラデーション背景
     st.markdown(
         """
-        <div class="login-container">
+        <style>
+            .stApp { background: linear-gradient(135deg, #14B8A6, #06B6D4, #6366F1) !important; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+        <div class="login-card">
             <div class="login-logo">ES Generator</div>
-            <div class="login-subtitle">就活ES志望動機ジェネレーター</div>
+            <div class="login-subtitle">何十社分のES、もう1から書かなくていい。</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -25,15 +31,23 @@ def check_password() -> bool:
 
     _, center, _ = st.columns([1, 1.5, 1])
     with center:
-        password = st.text_input("パスワード", type="password", label_visibility="collapsed", placeholder="パスワードを入力")
-        if st.button("ログイン", type="primary", use_container_width=True):
-            app_password = os.getenv("APP_PASSWORD", "")
-            if not app_password:
-                st.error("APP_PASSWORDが未設定です。.envファイルを確認してください。")
-                return False
-            if password == app_password:
-                st.session_state["authenticated"] = True
-                st.rerun()
-            else:
-                st.error("パスワードが正しくありません")
+        st.markdown('<div class="login-area">', unsafe_allow_html=True)
+        if st.button("Googleでログイン", type="primary", use_container_width=True):
+            st.login("google")
+        st.markdown('</div>', unsafe_allow_html=True)
+
     return False
+
+
+def logout_button():
+    """サイドバーにログアウトボタンを表示する。"""
+    if st.user.is_logged_in:
+        with st.sidebar:
+            st.divider()
+            st.markdown(
+                f'<span style="font-size: 0.78rem; color: #6B7280;">'
+                f'{st.user.email}</span>',
+                unsafe_allow_html=True,
+            )
+            if st.button("ログアウト", use_container_width=True):
+                st.logout()

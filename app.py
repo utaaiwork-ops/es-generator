@@ -1,81 +1,106 @@
 import streamlit as st
-from lib.auth import check_password
-from lib.styles import inject_css
+from lib.auth import check_auth, logout_button
+from lib.styles import inject_css, hero_header
 
 st.set_page_config(
-    page_title="ES志望動機ジェネレーター",
-    page_icon="📝",
+    page_title="ES Generator",
+    page_icon="",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 inject_css()
 
-if not check_password():
+if not check_auth():
     st.stop()
 
-# --- トップページ ---
-st.markdown(
-    """
-    <div class="page-header" style="text-align: center; padding: 3rem 2rem;">
-        <h1 style="font-size: 2rem !important;">ES志望動機ジェネレーター</h1>
-        <p style="font-size: 1.05rem;">プロフィールを登録して、企業ごとに刺さるESを自動生成</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
+logout_button()
+
+# --- Hero ---
+hero_header(
+    "プロフィールを1回登録。<br/>あとは企業URLを変えるだけ。",
+    "何十社分のES作成を、圧倒的にラクにする。",
 )
 
+# --- Feature Cards ---
 col1, col2, col3 = st.columns(3)
+
+ICON_USER = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'
+ICON_SPARKLES = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5H18l-3.5 2.5L16 14.5 12 12l-4 2.5 1.5-4.5L6 7.5h4.5z"/></svg>'
+ICON_FILE = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
 
 with col1:
     st.markdown(
-        """
-        <div class="card" style="text-align: center; min-height: 200px;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem; color: #0369A1;">&#x1F464;</div>
-            <h3 style="margin: 0 0 0.5rem 0 !important;">プロフィール設定</h3>
-            <p style="font-size: 0.9rem; color: #64748B;">
-                自分の情報を登録・編集<br/>
-                ガクチカ・強み・経験など
-            </p>
+        f"""
+        <div class="feature-card">
+            <div class="feature-icon-box">{ICON_USER}</div>
+            <div class="feature-title">プロフィール設定</div>
+            <div class="feature-desc">一度だけ登録すれば、何十社分でもOK</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    if st.button("プロフィール設定へ", use_container_width=True, type="primary"):
+        st.switch_page("pages/1_profile.py")
 
 with col2:
     st.markdown(
-        """
-        <div class="card" style="text-align: center; min-height: 200px;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem; color: #0EA5E9;">&#x2728;</div>
-            <h3 style="margin: 0 0 0.5rem 0 !important;">ES生成</h3>
-            <p style="font-size: 0.9rem; color: #64748B;">
-                企業HPを入力してAIが生成<br/>
-                志望動機・ガクチカ・自己PR
-            </p>
+        f"""
+        <div class="feature-card">
+            <div class="feature-icon-box">{ICON_SPARKLES}</div>
+            <div class="feature-title">ES生成</div>
+            <div class="feature-desc">企業URLを貼って、ワンクリックで生成</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    if st.button("ES生成へ", use_container_width=True, type="primary"):
+        st.switch_page("pages/2_generate.py")
 
 with col3:
     st.markdown(
-        """
-        <div class="card" style="text-align: center; min-height: 200px;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem; color: #22C55E;">&#x1F4DA;</div>
-            <h3 style="margin: 0 0 0.5rem 0 !important;">履歴一覧</h3>
-            <p style="font-size: 0.9rem; color: #64748B;">
-                過去に生成したESを管理<br/>
-                検索・編集・再生成
-            </p>
+        f"""
+        <div class="feature-card">
+            <div class="feature-icon-box">{ICON_FILE}</div>
+            <div class="feature-title">履歴一覧</div>
+            <div class="feature-desc">生成したESを企業別に管理・編集</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    if st.button("履歴一覧へ", use_container_width=True, type="primary"):
+        st.switch_page("pages/3_history.py")
 
+# --- Step Guide ---
+st.markdown("")
 st.markdown(
     """
-    <div style="text-align: center; margin-top: 1.5rem; color: #64748B; font-size: 0.85rem;">
-        左のサイドバーからページを選択してください
+    <div class="step-guide">
+        <div class="step-guide-title">使い方</div>
+        <div class="step-flow">
+            <div class="step-flow-item">
+                <span class="step-flow-num">1</span>
+                <span class="step-flow-text">プロフィール登録（初回のみ）</span>
+            </div>
+            <span class="step-flow-arrow">→</span>
+            <div class="step-flow-item">
+                <span class="step-flow-num">2</span>
+                <span class="step-flow-text">企業URLを入力</span>
+            </div>
+            <span class="step-flow-arrow">→</span>
+            <div class="step-flow-item">
+                <span class="step-flow-num">3</span>
+                <span class="step-flow-text">ES自動生成</span>
+            </div>
+            <span class="step-flow-arrow">→</span>
+            <div class="step-flow-item">
+                <span class="step-flow-num" style="font-size: 0.55rem;">完了</span>
+                <span class="step-flow-text">コピペして提出</span>
+            </div>
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.78rem; color: #6B7280;">
+            まずはプロフィールから始めてみましょう。完璧でなくてもOKです。
+        </p>
     </div>
     """,
     unsafe_allow_html=True,

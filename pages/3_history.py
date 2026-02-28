@@ -1,16 +1,19 @@
 import streamlit as st
-from lib.auth import check_password
+from lib.auth import check_auth, logout_button
 from lib.database import list_companies, list_es, update_es, delete_es
-from lib.styles import inject_css, page_header, metric_cards, badge
+from lib.styles import inject_css, page_header_minimal, metric_cards, badge, char_pill
 from prompts.templates import ES_TYPES
 
-st.set_page_config(page_title="履歴一覧", page_icon="📝", layout="wide")
+st.set_page_config(page_title="履歴一覧", page_icon="", layout="wide")
 inject_css()
 
-if not check_password():
+if not check_auth():
     st.stop()
 
-page_header("履歴一覧", "過去に生成したESを確認・編集できます")
+logout_button()
+
+# --- Minimal header ---
+page_header_minimal("履歴一覧", "生成したESを企業ごとに管理")
 
 # データ取得
 try:
@@ -20,12 +23,24 @@ except Exception as e:
     st.stop()
 
 if not companies:
+    st.markdown("")
     st.markdown(
         """
         <div class="empty-state">
-            <div class="empty-state-icon">&#x1F4C4;</div>
-            <p style="font-size: 1.1rem; font-weight: 500;">まだ保存されたESはありません</p>
-            <p style="font-size: 0.9rem;">ES生成画面で作成してみましょう</p>
+            <div style="width: 48px; height: 48px; margin: 0 auto 0.75rem; background: #F3F4F6;
+                        border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="#6B7280" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+            </div>
+            <p style="font-size: 0.92rem; font-weight: 500; color: #1A1A2E; margin-bottom: 0.25rem;">
+                まだ保存されたESはありません
+            </p>
+            <p style="font-size: 0.78rem; color: #6B7280;">
+                ES生成画面で作成して保存するとここに表示されます
+            </p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -39,27 +54,31 @@ except Exception as e:
     st.error(f"データ取得エラー: {e}")
     st.stop()
 
+ICON_BUILDING = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6A0" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>'
+ICON_FILE = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6A0" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+
 metric_cards([
-    (str(len(companies)), "登録企業数"),
-    (str(len(all_es)), "生成ES数"),
+    (str(len(companies)), "登録企業数", ICON_BUILDING),
+    (str(len(all_es)), "生成ES数", ICON_FILE),
 ])
 
-# フィルタ行
+# --- フィルタ ---
 col_filter, col_search = st.columns([1, 2])
 
 with col_filter:
-    company_options = {"すべて": None}
+    company_options = {"すべての企業": None}
     company_options.update({c["name"]: c["id"] for c in companies})
-    selected_company = st.selectbox("会社でフィルタ", list(company_options.keys()))
+    selected_company = st.selectbox("企業フィルタ", list(company_options.keys()),
+                                    label_visibility="collapsed")
     company_id_filter = company_options[selected_company]
 
 with col_search:
-    search_query = st.text_input("キーワード検索", placeholder="検索したいキーワード...")
+    search_query = st.text_input("キーワード検索", placeholder="キーワード検索",
+                                 label_visibility="collapsed")
 
-# 一覧取得
+# --- 一覧取得 ---
 es_list = list_es(company_id=company_id_filter) if company_id_filter is not None else all_es
 
-# キーワードフィルタ
 if search_query:
     q = search_query.lower()
     es_list = [
@@ -75,7 +94,7 @@ if not es_list:
 
 st.caption(f"{len(es_list)}件のES")
 
-# ES一覧
+# --- ES一覧 ---
 for es in es_list:
     company_name = (
         es.get("companies", {}).get("name", "不明")
@@ -85,45 +104,44 @@ for es in es_list:
     es_type = es.get("es_type", "")
     question = es.get("question", "")
     created = es.get("created_at", "")[:10]
-    char_limit = es.get("char_limit", "?")
+    char_limit = es.get("char_limit", 999)
+    content = es.get("content", "")
 
-    # ヘッダー
     label_parts = [company_name, es_type]
     if question:
         label_parts.append(question)
     label = " / ".join(label_parts)
 
-    type_badge = badge(es_type, "blue")
-    date_badge = badge(created, "gray")
-
     with st.expander(label):
         st.markdown(
-            f"{type_badge}　{date_badge}　"
-            f'<span style="color: #64748B; font-size: 0.8rem;">文字数上限: {char_limit}字</span>',
+            f'{badge(es_type, "teal")}  {badge(created, "gray")}  '
+            f'<span style="color: #6B7280; font-size: 0.72rem;">上限 {char_limit}字</span>',
             unsafe_allow_html=True,
         )
 
+        st.markdown("")
+
         edited_content = st.text_area(
-            "内容",
-            value=es.get("content", ""),
-            height=220,
-            key=f"edit_{es['id']}",
-            label_visibility="collapsed",
+            "内容", value=content, height=200,
+            key=f"edit_{es['id']}", label_visibility="collapsed",
         )
 
-        current_len = len(edited_content)
-        color = "#22C55E" if current_len <= (char_limit or 999) else "#EF4444"
+        clean = (
+            edited_content.replace("\n", "").replace("\r", "")
+            .replace(" ", "").replace("\u3000", "")
+        )
+        char_pill(len(clean), char_limit or 999)
+
         st.markdown(
-            f'<p style="text-align: right; font-size: 0.85rem; margin-top: -0.5rem;">'
-            f'文字数: <span style="color: {color}; font-weight: 600;">{current_len}</span>'
-            f' / {char_limit}字</p>',
+            '<span style="font-size: 0.72rem; color: #6B7280;">編集して内容を調整できます</span>',
             unsafe_allow_html=True,
         )
 
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            if st.button("更新", key=f"update_{es['id']}", use_container_width=True):
+            if st.button("更新", key=f"update_{es['id']}", use_container_width=True,
+                         type="primary"):
                 try:
                     update_es(es["id"], edited_content)
                     st.success("更新しました")
@@ -131,7 +149,7 @@ for es in es_list:
                     st.error(f"更新失敗: {e}")
 
         with col2:
-            if st.button("コピー用表示", key=f"copy_{es['id']}", use_container_width=True):
+            if st.button("コピー", key=f"copy_{es['id']}", use_container_width=True):
                 st.code(edited_content, language=None)
 
         with col3:
