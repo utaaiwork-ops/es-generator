@@ -72,7 +72,6 @@ with col3:
         st.switch_page("pages/3_履歴一覧.py")
 
 # --- Step Guide ---
-st.markdown("")
 st.markdown(
     """
     <div class="step-guide">

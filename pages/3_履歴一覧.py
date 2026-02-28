@@ -119,8 +119,6 @@ for es in es_list:
             unsafe_allow_html=True,
         )
 
-        st.markdown("")
-
         edited_content = st.text_area(
             "内容", value=content, height=200,
             key=f"edit_{es['id']}", label_visibility="collapsed",
@@ -153,6 +151,7 @@ for es in es_list:
                 st.code(edited_content, language=None)
 
         with col3:
+            st.markdown('<div class="delete-btn">', unsafe_allow_html=True)
             if st.button("削除", key=f"delete_{es['id']}", use_container_width=True):
                 try:
                     delete_es(es["id"])
@@ -160,3 +159,4 @@ for es in es_list:
                     st.rerun()
                 except Exception as e:
                     st.error(f"削除失敗: {e}")
+            st.markdown('</div>', unsafe_allow_html=True)

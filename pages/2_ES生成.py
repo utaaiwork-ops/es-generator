@@ -196,28 +196,12 @@ if "generated_result" in st.session_state:
     limit = meta["char_limit"]
     char_pill(current_len, limit)
 
-    # コピーボタン（★最大・オレンジ）
-    st.markdown(
-        '<style>'
-        '.copy-btn .stButton > button[kind="primary"] {'
-        '  background-color: #F97316 !important;'
-        '  font-size: 1rem !important;'
-        '  font-weight: 700 !important;'
-        '  padding: 0.75rem !important;'
-        '}'
-        '.copy-btn .stButton > button[kind="primary"]:hover {'
-        '  background-color: #EA580C !important;'
-        '}'
-        '</style>',
-        unsafe_allow_html=True,
-    )
-
-    with st.container():
-        st.markdown('<div class="copy-btn">', unsafe_allow_html=True)
-        if st.button("コピー", type="primary", use_container_width=True):
-            st.code(edited, language=None)
-            st.success("上のテキストをコピーしてください")
-        st.markdown('</div>', unsafe_allow_html=True)
+    # コピーボタン（オレンジ）
+    st.markdown('<div class="copy-btn">', unsafe_allow_html=True)
+    if st.button("コピー", type="primary", use_container_width=True):
+        st.code(edited, language=None)
+        st.success("上のテキストをコピーしてください")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     col_save, col_next = st.columns(2)
 

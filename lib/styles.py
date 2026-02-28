@@ -251,9 +251,9 @@ CUSTOM_CSS = """
     .step-card {
         background: #FFFFFF;
         border: 1px solid #E5E7EB;
-        border-radius: 10px;
-        padding: 1.25rem;
-        margin-bottom: 0.75rem;
+        border-radius: 16px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 1rem;
     }
 
     .step-header {
@@ -472,6 +472,28 @@ CUSTOM_CSS = """
     .success-inline-sub {
         font-size: 0.72rem;
         color: #6B7280;
+    }
+
+    /* --- Orange copy button --- */
+    .copy-btn .stButton > button[kind="primary"] {
+        background-color: #F97316 !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        padding: 0.75rem !important;
+    }
+    .copy-btn .stButton > button[kind="primary"]:hover {
+        background-color: #EA580C !important;
+    }
+
+    /* --- Red delete button --- */
+    .delete-btn .stButton > button {
+        background-color: #FEE2E2 !important;
+        color: #DC2626 !important;
+        border-color: #FECACA !important;
+    }
+    .delete-btn .stButton > button:hover {
+        background-color: #FCA5A5 !important;
+        color: #FFFFFF !important;
     }
 
     /* --- Step guide (Home) --- */
