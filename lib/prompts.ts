@@ -228,7 +228,7 @@ export function buildUserPrompt(
   }
 
   const goalMin = Math.floor(charLimit * 0.95)
-  const goalMax = Math.floor(charLimit * 1.05)
+  const goalMax = charLimit + 20
 
   return `【学生のプロフィール】
 ${profileText}
@@ -244,7 +244,7 @@ ${typeGuide}
 【文字数について】★最重要★
 - 目標: ${goalMin}〜${goalMax}字（制限字数ギリギリまで使い切ること）
 - 短すぎるのはNG。${charLimit}字の制限をフル活用し、内容を充実させること
-- 少し超える分には問題ない。足りないよりは多い方が良い
+- ただし${goalMax}字を絶対に超えないこと。超過は最大20字まで許容
 - 句読点・括弧も1字としてカウントすること
 
 【重要な注意】
