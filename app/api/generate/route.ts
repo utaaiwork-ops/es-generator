@@ -23,14 +23,11 @@ export async function POST(request: NextRequest) {
 
     const client = new Anthropic({ apiKey })
 
-    // LLMは日本語の文字数カウントが不正確なので、内部的に25%少ない上限を渡す
-    const internalLimit = Math.floor(charLimit * 0.75)
-
     const userPrompt = buildUserPrompt(
       profile,
       companyInfo,
       esType,
-      internalLimit,
+      charLimit,
       customQuestion,
     )
 

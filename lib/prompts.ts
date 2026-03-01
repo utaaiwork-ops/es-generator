@@ -227,8 +227,8 @@ export function buildUserPrompt(
     typeGuide = TYPE_GUIDES[esType] ?? "結論ファースト・PREP法で構成してください。"
   }
 
-  const goalMin = Math.floor(charLimit * 0.85)
-  const goalMax = Math.floor(charLimit * 0.95)
+  const goalMin = Math.floor(charLimit * 0.95)
+  const goalMax = Math.floor(charLimit * 1.05)
 
   return `【学生のプロフィール】
 ${profileText}
@@ -241,11 +241,11 @@ ${typeGuide}
 【指示】
 上記の学生のプロフィールと企業情報を踏まえ、この企業に刺さる「${esLabel}」を作成してください。
 
-【文字数の厳守】★最重要★
-- 絶対に${charLimit}字を超えないこと（1字でも超えたらNG）
-- 目標: ${goalMin}〜${goalMax}字（余裕を持って収める）
+【文字数について】★最重要★
+- 目標: ${goalMin}〜${goalMax}字（制限字数ギリギリまで使い切ること）
+- 短すぎるのはNG。${charLimit}字の制限をフル活用し、内容を充実させること
+- 少し超える分には問題ない。足りないよりは多い方が良い
 - 句読点・括弧も1字としてカウントすること
-- 出力前に必ず文字数を数え直し、超えていたら削って調整すること
 
 【重要な注意】
 - プロフィールに書かれた事実・経験のみを使うこと。存在しないエピソードを捏造しない
