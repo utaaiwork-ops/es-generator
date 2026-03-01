@@ -38,8 +38,8 @@ export function HomeScreen() {
   return (
     <div className="flex flex-col gap-6">
       {/* Hero Header */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#0D9488] to-[#0F766E] px-8 py-8">
-        <h1 className="text-2xl font-bold text-[#FFFFFF]">
+      <div className="rounded-2xl bg-gradient-to-r from-[#0D9488] to-[#0F766E] px-5 py-6 md:px-8 md:py-8">
+        <h1 className="text-lg font-bold text-[#FFFFFF] md:text-2xl">
           プロフィールを1回登録。あとは企業URLを変えるだけ。
         </h1>
         <p className="mt-2 text-sm text-[#FFFFFF]/80">
@@ -89,7 +89,7 @@ export function HomeScreen() {
       {/* Steps */}
       <div className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
         <h2 className="text-sm font-semibold text-foreground">使い方</h2>
-        <div className="mt-4 flex items-center gap-3">
+        <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center">
           {steps.map((step, i) => (
             <div key={step.num} className="flex items-center gap-3">
               <div className="flex items-center gap-2">
@@ -99,7 +99,7 @@ export function HomeScreen() {
                 <span className="text-sm text-foreground">{step.text}</span>
               </div>
               {i < steps.length - 1 && (
-                <ArrowRight className="size-3.5 shrink-0 text-muted-foreground" />
+                <ArrowRight className="hidden size-3.5 shrink-0 text-muted-foreground md:block" />
               )}
             </div>
           ))}

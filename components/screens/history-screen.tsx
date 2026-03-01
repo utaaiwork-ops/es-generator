@@ -168,9 +168,9 @@ export function HistoryScreen() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <Select value={companyFilter} onValueChange={setCompanyFilter}>
-          <SelectTrigger className="h-9 w-48 rounded-[10px] border-[1.5px] text-xs">
+          <SelectTrigger className="h-9 w-full rounded-[10px] border-[1.5px] text-xs md:w-48">
             <SelectValue placeholder="会社フィルタ" />
           </SelectTrigger>
           <SelectContent>
@@ -231,8 +231,8 @@ export function HistoryScreen() {
                 className="rounded-[14px] border border-border bg-card shadow-sm transition-all hover:shadow-md"
               >
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-2 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-5">
+                  <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
                     <button
                       onClick={() =>
                         setExpandedId(isExpanded ? null : item.id)
@@ -249,15 +249,17 @@ export function HistoryScreen() {
                         {item.companyName}
                       </span>
                     </button>
-                    <Badge
-                      variant="secondary"
-                      className="rounded-full text-[10px]"
-                    >
-                      {item.esType}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {item.createdAt}
-                    </span>
+                    <div className="flex items-center gap-2 pl-7 md:pl-0">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full text-[10px]"
+                      >
+                        {item.esType}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {item.createdAt}
+                      </span>
+                    </div>
                   </div>
                   <Button
                     onClick={() => handleCopy(item.id, currentContent)}
@@ -281,7 +283,7 @@ export function HistoryScreen() {
 
                 {/* Expanded content */}
                 {isExpanded && (
-                  <div className="border-t border-border px-5 pb-5 pt-4">
+                  <div className="border-t border-border px-4 pb-5 pt-4 md:px-5">
                     <Textarea
                       value={currentContent}
                       onChange={(e) =>

@@ -92,3 +92,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Safe area utilities */
+.safe-top {
+  padding-top: max(env(safe-area-inset-top), 1.5rem);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Standalone PWA mode */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior: none;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  [data-slot="button"],
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

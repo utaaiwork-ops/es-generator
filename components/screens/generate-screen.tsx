@@ -232,7 +232,7 @@ export function GenerateScreen() {
       )}
 
       {/* Step 1 */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <div className="flex items-center gap-2.5">
           <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
             1
@@ -305,7 +305,7 @@ export function GenerateScreen() {
       </section>
 
       {/* Step 2 */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <div className="flex items-center gap-2.5">
           <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
             2
@@ -337,7 +337,7 @@ export function GenerateScreen() {
       </section>
 
       {/* Step 3 */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <div className="flex items-center gap-2.5">
           <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
             3
@@ -364,7 +364,7 @@ export function GenerateScreen() {
       </section>
 
       {/* Step 4 - Generate */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <div className="flex items-center gap-2.5">
           <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
             4
@@ -404,7 +404,7 @@ export function GenerateScreen() {
             <span className="text-sm font-medium text-[#059669]">生成完了</span>
           </div>
 
-          <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+          <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
             <Textarea
               value={generatedText}
               onChange={(e) => setGeneratedText(e.target.value)}

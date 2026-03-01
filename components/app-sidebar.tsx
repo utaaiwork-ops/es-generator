@@ -2,6 +2,7 @@
 
 import { Home, User, Sparkles, FileText, LogOut } from "lucide-react"
 import { useApp } from "@/lib/app-context"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -13,6 +14,9 @@ const navItems = [
 
 export function AppSidebar() {
   const { screen, setScreen } = useApp()
+  const isMobile = useIsMobile()
+
+  if (isMobile) return null
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-60 flex-col border-r border-border bg-card">
