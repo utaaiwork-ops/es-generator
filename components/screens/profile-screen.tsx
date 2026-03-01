@@ -114,7 +114,7 @@ export function ProfileScreen() {
       </div>
 
       {/* Basic Info */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <h2 className="text-sm font-semibold text-foreground">基本情報</h2>
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           <FieldInput label="氏名" value={form.name} onChange={(v) => handleChange("name", v)} placeholder="山田 太郎" />
@@ -125,7 +125,7 @@ export function ProfileScreen() {
       </section>
 
       {/* Episodes */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <h2 className="text-sm font-semibold text-foreground">あなたのエピソード</h2>
         <div className="mt-4 flex flex-col gap-4">
           <FieldTextarea label="ゼミ・研究内容" value={form.seminar} onChange={(v) => handleChange("seminar", v)} placeholder="ゼミや研究の内容を具体的に書いてください" />
@@ -136,7 +136,7 @@ export function ProfileScreen() {
       </section>
 
       {/* Values */}
-      <section className="rounded-[14px] border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-[14px] border border-border bg-card p-4 shadow-sm md:p-6">
         <h2 className="text-sm font-semibold text-foreground">あなたの軸</h2>
         <div className="mt-4 flex flex-col gap-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
