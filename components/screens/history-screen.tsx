@@ -36,7 +36,7 @@ function countChars(text: string): number {
 }
 
 export function HistoryScreen() {
-  const { setScreen } = useApp()
+  const { setScreen, user } = useApp()
   const [history, setHistory] = useState<ESItem[]>([])
   const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState<number | null>(null)
@@ -49,7 +49,7 @@ export function HistoryScreen() {
   // DBからES一覧を取得
   const loadHistory = useCallback(async () => {
     try {
-      const data = await listEs()
+      const data = await listEs(user!.id)
       const items: ESItem[] = data.map((row) => ({
         id: row.id,
         companyId: row.company_id,
@@ -99,7 +99,7 @@ export function HistoryScreen() {
     const newContent = editContents[id]
     if (newContent === undefined) return
     try {
-      await updateEs(id, newContent)
+      await updateEs(user!.id, id, newContent)
       setHistory((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, content: newContent, isEdited: true } : item,
@@ -116,7 +116,7 @@ export function HistoryScreen() {
   const handleDelete = async (id: number) => {
     if (!confirm("このESを削除しますか？")) return
     try {
-      await deleteEs(id)
+      await deleteEs(user!.id, id)
       setHistory((prev) => prev.filter((item) => item.id !== id))
     } catch (err) {
       console.error("削除エラー:", err)

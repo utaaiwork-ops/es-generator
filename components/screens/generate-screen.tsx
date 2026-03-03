@@ -46,7 +46,7 @@ function countChars(text: string): number {
 }
 
 export function GenerateScreen() {
-  const { profile, setProfile, isProfileComplete, setScreen } = useApp()
+  const { profile, setProfile, isProfileComplete, setScreen, user } = useApp()
 
   const [companyName, setCompanyName] = useState("")
   const [companyUrl, setCompanyUrl] = useState("")
@@ -161,12 +161,14 @@ export function GenerateScreen() {
   const handleSave = async () => {
     try {
       const companyId = await createCompany(
+        user!.id,
         companyName,
         companyUrl || null,
         scrapedInfo || null,
         manualInfo || null,
       )
       await saveEs(
+        user!.id,
         companyId,
         esType,
         esType === "その他" ? customQuestion || null : null,

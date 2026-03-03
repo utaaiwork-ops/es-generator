@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { Loader2 } from "lucide-react"
 import { AppProvider, useApp } from "@/lib/app-context"
 import { AppSidebar } from "@/components/app-sidebar"
 import { MobileBottomNav } from "@/components/mobile-bottom-nav"
@@ -9,9 +10,10 @@ import { HomeScreen } from "@/components/screens/home-screen"
 import { ProfileScreen } from "@/components/screens/profile-screen"
 import { GenerateScreen } from "@/components/screens/generate-screen"
 import { HistoryScreen } from "@/components/screens/history-screen"
+import { LoginScreen } from "@/components/screens/login-screen"
 
 function AppContent() {
-  const { screen } = useApp()
+  const { screen, authLoading } = useApp()
   const prevScreen = useRef(screen)
 
   useEffect(() => {
@@ -20,6 +22,18 @@ function AppContent() {
       prevScreen.current = screen
     }
   }, [screen])
+
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  if (screen === "login") {
+    return <LoginScreen />
+  }
 
   return (
     <div className="flex min-h-screen bg-background">

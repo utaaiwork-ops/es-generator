@@ -1,9 +1,30 @@
 import { NextRequest, NextResponse } from "next/server"
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import Anthropic from "@anthropic-ai/sdk"
 import { getSystemPrompt, buildUserPrompt } from "@/lib/prompts"
 
 export async function POST(request: NextRequest) {
   try {
+    // 認証チェック
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(_cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+            // API routeではcookieの書き込みは不要
+          },
+        },
+      },
+    )
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: "認証が必要です" }, { status: 401 })
+    }
+
     const { profile, companyInfo, esType, charLimit, customQuestion } = await request.json()
 
     if (!profile || !companyInfo || !esType || !charLimit) {

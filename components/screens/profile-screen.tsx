@@ -25,7 +25,7 @@ function getProgressColor(percent: number) {
 }
 
 export function ProfileScreen() {
-  const { profile, setProfile, profileCompletion, setScreen } = useApp()
+  const { profile, setProfile, profileCompletion, setScreen, user } = useApp()
   const [form, setForm] = useState<Profile>(profile)
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -36,7 +36,7 @@ export function ProfileScreen() {
     let cancelled = false
     async function load() {
       try {
-        const data = await getProfile()
+        const data = await getProfile(user!.id)
         if (!cancelled) {
           const merged = { ...defaultProfile, ...data }
           setForm(merged)
@@ -60,7 +60,7 @@ export function ProfileScreen() {
     setSaving(true)
     try {
       const keys = Object.keys(form) as (keyof Profile)[]
-      await Promise.all(keys.map((key) => upsertProfile(key, form[key])))
+      await Promise.all(keys.map((key) => upsertProfile(user!.id, key, form[key])))
       setProfile(form)
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)

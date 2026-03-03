@@ -12,7 +12,7 @@ const navItems = [
 ]
 
 export function AppSidebar() {
-  const { screen, setScreen } = useApp()
+  const { screen, setScreen, user, signOut } = useApp()
 
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-screen w-60 flex-col border-r border-border bg-card md:flex">
@@ -44,13 +44,10 @@ export function AppSidebar() {
         })}
       </nav>
       <div className="border-t border-border px-4 py-4">
-        <p className="text-xs text-muted-foreground">user@example.com</p>
+        <p className="truncate text-xs text-muted-foreground">{user?.email ?? ""}</p>
         <button
           className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-          onClick={() => {
-            // 認証は後のフェーズで実装
-            alert("ログアウト機能は今後実装予定です")
-          }}
+          onClick={() => signOut()}
         >
           <LogOut className="size-3.5" />
           ログアウト
